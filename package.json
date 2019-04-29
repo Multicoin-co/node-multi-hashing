@@ -8,10 +8,11 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/zone117x/node-multi-hashing.git"
+        "url": "https://github.com/multicoin-co/node-multi-hashing.git"
     },
-    "dependencies" : {
-        "bindings" : "*"
+    "dependencies": {
+        "bindings": "*",
+        "safe-buffer": "^5.1.2"
     },
     "keywords": [
         "scrypt",
@@ -26,6 +27,7 @@
         "blake",
         "shavite",
         "fugue",
-        "sha1"
+        "sha1",
+        "x21s"
     ]
 }
