@@ -50,6 +50,8 @@ extern "C" {
     #include "xevan.h"
     #include "yescrypt/yescrypt.h"
     #include "yescrypt/sha256_Y.h"
+    #include "verthash/h2.h"
+    #include "verthash/h1.h"
 }
 
 #include "boolberry.h"
@@ -589,6 +591,39 @@ DECLARE_FUNC(odo) {
    SET_BUFFER_RETURN(output, 32);
 }
 
+DECLARE_FUNC(verthash) {
+    DECLARE_SCOPE;
+
+    if (args.Length() < 2)
+        RETURN_EXCEPT("You must provide a datfile and a buffer to hash");
+
+#if NODE_MAJOR_VERSION >= 12
+    Local<Object> target = args[0]->ToObject(isolate);
+    Local<Object> dat = args[1]->ToObject(isolate);
+
+#else
+    Local<Object> target = args[0]->ToObject();
+    Local<Object> dat = args[1]->ToObject();
+#endif
+
+    if (!Buffer::HasInstance(target))
+        RETURN_EXCEPT("target should be a buffer object.");
+
+    if (!Buffer::HasInstance(dat))
+        RETURN_EXCEPT("datfile should be a buffer object.");
+
+	unsigned char * datfileInput = (unsigned char *) Buffer::Data(args[0]);
+	uint32_t datfileSize = Buffer::Length(args[0]);
+	unsigned char * targetInput = (unsigned char *) Buffer::Data(args[1]);
+	uint32_t targetSize = Buffer::Length(args[1]);
+
+	unsigned char output[32];
+
+	verthash_hash(datfileInput, datfileSize, targetInput, targetSize, output);
+
+	args.GetReturnValue().Set(Buffer::Copy(isolate, (char *) output, 32).ToLocalChecked());
+}
+
 DECLARE_INIT(init) {
     NODE_SET_METHOD(exports, "allium", allium);
     NODE_SET_METHOD(exports, "bcrypt", bcrypt);
@@ -639,6 +674,7 @@ DECLARE_INIT(init) {
     NODE_SET_METHOD(exports, "x17", x17);
     NODE_SET_METHOD(exports, "xevan", xevan);
     NODE_SET_METHOD(exports, "yescrypt", yescrypt);
+    NODE_SET_METHOD(exports, "verthash", verthash);
 }
 
 NODE_MODULE(multihashing, init)

@@ -277,5 +277,7 @@ scrypt_ensure_zero(void *p, size_t len) {
 #endif
 }
 
+#if defined(OS_OSX)
+#else
 #include "scrypt-jane-portable-x86.h"
-
+#endif

@@ -97,7 +97,13 @@
                 "crypto/hash.c",
                 "crypto/oaes_lib.c",
                 "crypto/odocrypt.cpp",
-                "crypto/wild_keccak.cpp"
+                "crypto/wild_keccak.cpp",
+                "verthash/h1.c",
+                "verthash/h1.h",
+                "verthash/h2.c",
+                "verthash/h2.h",
+                "verthash/tiny_sha3/sha3.c",
+                "verthash/tiny_sha3/sha3.h",
             ],
             'conditions': [
                 ['OS=="linux"',
@@ -129,7 +135,7 @@
                 ]
               ],
             "include_dirs": [
-                "crypto"
+                "crypto",
             ],
             "cflags_cc": [
                 "-std=c++0x"
